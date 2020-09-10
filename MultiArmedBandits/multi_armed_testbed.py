@@ -52,8 +52,7 @@ class KArmedBandit(object):
 
         if type(self.action_set).__module__ != np.__name__:
             if isinstance(self.action_set, list):
-                # todo convert list to numpy array
-                ...
+                self.action_set = np.asarray(self.action_set)  # convert list to numpy array
             else: raise ValueError('action set must be list or numpy array')
 
         print("\taction_set: {}".format(self.action_set))
