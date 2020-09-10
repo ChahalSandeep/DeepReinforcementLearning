@@ -54,10 +54,8 @@ class KArmedBandit(object):
             if isinstance(self.action_set, list):
                 self.action_set = np.asarray(self.action_set)  # convert list to numpy array
             else: raise ValueError('action set must be list or numpy array')
-
         print("\taction_set: {}".format(self.action_set))
 
-        # initialize number of iterations
         if not isinstance(self.n_iter, int): self.n_iter = int(self.n_iter)
         print("\tn_iter: {}".format(self.n_iter))
 
