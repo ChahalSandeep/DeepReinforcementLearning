@@ -63,6 +63,7 @@ class GreedyKArmedBandit(KArmedBandit):
         self.mean_reward = self.total_reward / self.curr_step
 
     def run(self, print_info=False):
+        self.mean_reward_overtime.append(0)
         for n in range(self.n_iter):
             self.pull()
             if print_info:
