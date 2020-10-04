@@ -21,7 +21,6 @@ from utilities.date_time_to_string import datetime_to_str as unique_name
 __author__ = "Sandeep Chahal"
 __email__ = "sandeep.chahal@mavs.uta.edu", "chahal.sdp@gmail.com"
 
-
 avm_obj = Avm(k=5, n_iter=100)
 means = avm_obj.means
 avm1 = Avm(k=5, n_iter=100)  # shallow copy
