@@ -1,3 +1,5 @@
+Contains action value method with greedy, ave
+
 ### USE CASES:
 
 * Clinical Trials
