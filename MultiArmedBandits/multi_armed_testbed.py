@@ -10,7 +10,6 @@ contains multi armed bandit test bud suite
 
 # Third/Other party packages
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Owned/local source
 
@@ -32,10 +31,15 @@ class KArmedBandit(object):
         """
 
         self.k = 10  # default number of arms
-        self.action_set = np.zeros(self.k)  # default action set  todo check if this is right place
+        self.action_set = np.zeros(self.k)  # step_count for each arm
+        self.reward_set = np.zeros(self.k)  # Mean reward for each arm
         self.epsilon = 0.01  # initialize greedy selection
         self.n_iter = 10  # number od steps
-        self.optimal = 0  # reward
+        self.means = None  # initialized later in constructor
+        self.curr_step = 0
+        self.mean_reward = 0
+        self.reward=np.zeros(self.n_iter)
+        # todo check if maintaining count for each arm is helpful
 
         # update class variables
         self.__dict__.update((k, v) for k, v in kwargs.items())
@@ -50,14 +54,51 @@ class KArmedBandit(object):
         if not isinstance(self.epsilon, float): self.epsilon = float(self.epsilon)
         print("\tepsilon: {}".format(self.epsilon))
 
-        if type(self.action_set).__module__ != np.__name__:
-            if isinstance(self.action_set, list):
-                self.action_set = np.asarray(self.action_set)  # convert list to numpy array
-            else: raise ValueError('action set must be list or numpy array')
-        print("\taction_set: {}".format(self.action_set))
-
+        self.reward = np.zeros(self.n_iter)  # todo re-wise this
         if not isinstance(self.n_iter, int): self.n_iter = int(self.n_iter)
         print("\tn_iter: {}".format(self.n_iter))
+
+        if len(self.action_set) != self.k:
+            # print("action_set != Number of arms : This would result in action_set with zeros"
+            #       " which has equal number of arms")
+            self.action_set = np.zeros(self.k)
+        # else:
+        #     print("using user specified action set")
+
+        if len(self.reward_set) != self.k:
+            # print("reward_set != Number of arms : This would result in result_set with zeros"
+            #       " which has equal number of arms")
+            self.reward_set = np.zeros(self.k)
+        # else:
+        #     print("using user specified reward set")
+
+        # if type(self.action_set).__module__ != np.__name__:
+        #     if isinstance(self.action_set, list):
+        #         self.action_set = np.asarray(self.action_set)  # convert list to numpy array
+        #     else: raise ValueError('action set must be list or numpy array')
+        print("\taction_set: {}".format(self.action_set))
+
+        # if type(self.reward_set).__module__ != np.__name__:
+        #     if isinstance(self.reward_set, list):
+        #         self.reward_set = np.asarray(self.reward_set)  # convert list to numpy array
+        #     else: raise ValueError('reward set must be list or numpy array')
+        print("\treward_set: {}".format(self.reward_set))
+
+        if not (1 >= self.epsilon >= 0):
+            raise ValueError("epsilon must be between 0 and 1")
+
+        if self.means is None:
+            self.means = np.random.normal(0, 1, self.k)  # drawing sample from random normal distribution
+        elif len(self.means) != self.k:
+            raise ValueError("len(means) != k/arms")
+        else:
+            print("using user specified means")
+
+        if type(self.means).__module__ != np.__name__ :
+            if isinstance(self.means, list):
+                self.means = np.asarray(self.means)  # convert list to numpy array
+            else: raise ValueError('action set must be list or numpy array')
+        print("\tmeans: {}".format(self.means))
 
     def reset(self):
         raise NotImplementedError
