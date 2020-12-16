@@ -3,7 +3,7 @@
 
 """
 multi_armed_testbed.py
-contains multi armed bandit test bud suite
+contains multi armed bandit test bed suite
 """
 
 # Built-in/standard library
@@ -84,12 +84,13 @@ class KArmedBandit(object):
         if not (1 >= self.epsilon >= 0):
             raise ValueError("epsilon must be between 0 and 1")
 
-        if self.means is None:
-            self.means = np.random.normal(0, 1, self.k)  # drawing sample from random normal distribution
-        elif len(self.means) != self.k:
-            raise ValueError("len(means) != k/arms")
+        if self.means is not None:
+            if len(self.means) != self.k:
+                raise ValueError("len(means) != k/arms")
+            else:
+                print("using user specified means")
         else:
-            print("using user specified means")
+            self.means = np.random.normal(0, 1, self.k)  # drawing sample from random normal distribution
 
         if type(self.means).__module__ != np.__name__:
             if isinstance(self.means, list):
