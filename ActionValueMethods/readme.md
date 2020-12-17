@@ -8,14 +8,10 @@ below is explanation and pa rameters for action_value_methods.
 #### 1. Sample Average Method
 One natural value to estimate true value of action is by averaging the awards actually received.
 
-https://latex.codecogs.com/gif.latex?\frac{sum-of-rewards-when-a-taken-prior-to-t}{number-of-times-a-taken-prior-to-t}
+<img src = https://latex.codecogs.com/png.latex?%5Cequiv%20%5Cfrac%7Bsum-of-rewards-when-a-taken-prior-to-t%7D%7Bnumber-of-times-a-taken-prior-to-t%7D>
 
+<img src="https://latex.codecogs.com/gif.latex?%5Cequiv%20%5Cfrac%7B{\sum_{i=1}^{t-1}R_t\ * {1}_{A_t=a}}%7D{\sum_{i=1}^{t-1} \ * {1}_{A_t=a}">
 
-<img src="https://latex.codecogs.com/svg.latex?Q_t(a) = \frac{sum-of-rewards-when-a-taken-prior-to-t}{number-of-times-a-taken-prior-to-t}"><br/>
-
-<img src="https://latex.codecogs.com/svg.latex?  = \frac{\sum_{i=1}^{t-1}R_t\ * {\1}_{A_t=a}}{\sum_{i=1}^{t-1} \ * {\1}_{A_t=a}">
-
-\
 where 1<sub>predicate</sub> denotes random variable that 1 if predicate is true and 0 if it is not.
 
 the simplest action rule is to select one of the action with highest estimated value. i.e greedy policy.
