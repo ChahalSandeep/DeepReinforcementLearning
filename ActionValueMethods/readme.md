@@ -21,13 +21,13 @@ If there is more than one greedy action then randomly one of greedy action is ch
 A<sub>t</sub> = argmax<sub>a</sub> Q<sub>t</sub>(a)  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i.e. greedy action
 
 Greedy action will waste no time and pick the action with maximum reward.One can behave greedy all the time. However, it is good
-idea to not to go greedy at all time steps i.e. not always exploit but also explore which is achieved here by choosing random action every once in a while.
+idea not to go greedy at all time steps i.e. not always exploit but also explore which is achieved here by choosing random action every once in a while.
 
 #### Parameters:
 
 parameters for GreedyArmedBandit:
 
-k        : number of arms or option (int)
-epsilon  : greedy/biased (float) must be between 0 and 1.
-n_iter   : number of iterations (int)
-means    : list/np.array of mean of distribution in length should be equal to arms or oprions
+k        : number of arms or option (int)</br>
+epsilon  : greedy/biased (float) must be between 0 and 1.</br>
+n_iter   : number of iterations (int).</br>
+means    : list/np.array of mean of distribution in length should be equal to arms or options </br>
