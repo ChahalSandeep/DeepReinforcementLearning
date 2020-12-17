@@ -3,12 +3,15 @@ Methods for estimating the value of actions and for using estimates to make acti
 
 true value of action Q<sub>t</sub>(a) = mean reward when action is selected.
 
-below is explanation and parameters for action_value_methods.
+below is explanation and pa rameters for action_value_methods.
 
 #### 1. Sample Average Method
 One natural value to estimate true value of action is by averaging the awards actually received.
 
-<img src="https://latex.codecogs.com/svg.latex? Q_t(a) = \frac{sum-of-rewards-when-a-taken-prior-to-t}{number-of-times-a-taken-prior-to-t}"><br />
+https://latex.codecogs.com/gif.latex?\frac{sum-of-rewards-when-a-taken-prior-to-t}{number-of-times-a-taken-prior-to-t}
+
+
+<img src="https://latex.codecogs.com/svg.latex?Q_t(a) = \frac{sum-of-rewards-when-a-taken-prior-to-t}{number-of-times-a-taken-prior-to-t}"><br/>
 
 <img src="https://latex.codecogs.com/svg.latex?  = \frac{\sum_{i=1}^{t-1}R_t\ * {\1}_{A_t=a}}{\sum_{i=1}^{t-1} \ * {\1}_{A_t=a}">
 
