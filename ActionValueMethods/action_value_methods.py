@@ -62,6 +62,8 @@ class GreedyKArmedBandit(KArmedBandit):
         # update total mean reward
         self.mean_reward = self.total_reward / self.curr_step
 
+        # self.mean_reward = np.sum(self.mean_reward_set)/len(self.mean_reward_set)
+
     def run(self, print_info=False):
         self.mean_reward_overtime.append(0)
         for n in range(self.n_iter):
