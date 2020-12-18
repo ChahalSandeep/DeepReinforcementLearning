@@ -34,16 +34,18 @@ distribution = 'same'  # 'same'|'unique'
 class GreedyRewardComparison(object):
 
     def __init__(self, total_arms=10, total_iter=1000, total_runs=1000, total_agents=None, same_means=True):
-        self.total_arms, self.total_steps = total_arms, total_iter
+        self.total_arms, self.total_steps, self.total_runs = total_arms, total_iter, total_runs
         self.total_agents, self.same_means = total_agents, same_means
         # todo take this also as and argument
-        self.exploration_list = list(range(0, total_agents))
-        self.exploration_list = [x / total_agents for x in self.exploration_list]
+        self.exploration_list = list(range(0, total_agents-1))
+        self.exploration_list = [x / (total_agents *10) for x in self.exploration_list]
         self.exploration_list.append(1.0)
         # create an base arm
         self.base_arm = Avm(k=self.total_arms, n_iter=self.total_steps)
         self.base_mean = self.base_arm.means
         self._define_arms()
+        self.run_comparison()
+        # todo generate charts
 
     def _define_arms(self):
         if self.total_agents is None:
@@ -61,7 +63,13 @@ class GreedyRewardComparison(object):
         ...
 
     def run_comparison(self):
-        ...
+        avg_dict = dict()
+        for x in range(self.total_runs):
+            for ag in self.agents.keys():
+                self.agents[ag].run(print_info=False)
+                print("arms: " + ag + " real_mean: ", sum(self.agents[ag].means)/len(self.agents[ag].means), " result: ",
+                      self.agents[ag].mean_reward, " exp: ", self.agents[ag].epsilon)
+        print("here")
 
 
 def greedy_reward_comp(total_arms, total_iter, total_runs, total_agents):
@@ -107,9 +115,9 @@ def greedy_reward_comp(total_arms, total_iter, total_runs, total_agents):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-ta', '--total_arms', type=int, default=10, help="number of arms (trial_k)")
-    parser.add_argument('-tit', '--total_iter', type=int, default=1000, help="number of iterations/steps")
-    parser.add_argument('-tr', '--total_runs', type=int, default=1000, help="number of runs")
-    parser.add_argument('-tag', '--total_agents', type=int, default=3, help="number of runs")
+    parser.add_argument('-tit', '--total_iter', type=int, default=10000, help="number of iterations/steps")
+    parser.add_argument('-tr', '--total_runs', type=int, default=1, help="number of runs")
+    parser.add_argument('-tag', '--total_agents', type=int, default=5, help="number of runs")
     # parser.add_argument('-tag', '--total_agents', type=int, default=1000, help="number of runs")
     # todo add explorations list
     args = parser.parse_args()
