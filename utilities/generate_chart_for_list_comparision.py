@@ -13,7 +13,7 @@ import pathlib
 import matplotlib.pyplot as plt
 
 # Owned/local source
-from utilities.date_time_to_string import datetime_to_str as unique_name
+from utilities.utilities import datetime_to_str as unique_name
 
 __author__ = "Sandeep Chahal"
 __email__ = "sandeep.chahal@mavs.uta.edu", "chahal.sdp@gmail.com"
