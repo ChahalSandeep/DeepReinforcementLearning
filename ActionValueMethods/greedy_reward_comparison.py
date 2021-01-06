@@ -106,7 +106,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-ta', '--total_arms', type=int, default=10, help="number of arms (trial_k)")
     parser.add_argument('-tit', '--total_iter', type=int, default=2000, help="number of iterations/steps")
-    parser.add_argument('-tr', '--total_runs', type=int, default=2, help="number of runs")
+    parser.add_argument('-tr', '--total_runs', type=int, default=1, help="number of runs")
     parser.add_argument('-tag', '--total_agents', type=int, default=5, help="number of runs")
     # parser.add_argument('-tag', '--total_agents', type=int, default=1000, help="number of runs")
     # todo add explorations list
