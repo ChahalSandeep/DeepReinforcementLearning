@@ -36,7 +36,7 @@ class KArmedBandit(object):
         self.epsilon = 0.01  # initialize greedy selection
         self.n_iter = 10  # number of steps
         self.means = None  # initialized later in constructor
-        self.curr_step = 0
+        self.curr_step = 0   # to maintain running step
         self.mean_reward = 0
         self.total_each_arm_reward = np.zeros(self.k)
         self.total_reward = 0
