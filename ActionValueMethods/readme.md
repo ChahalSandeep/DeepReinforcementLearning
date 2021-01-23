@@ -32,7 +32,6 @@ epsilon  : greedy/biased (float) must be between 0 and 1.</br>
 n_iter   : number of iterations (int).</br>
 means    : list/np.array of mean of distribution in length should be equal to arms or options </br>
 
-
 #### Conclusion
 If the variance is smaller like zero greedy methods would outperform sample average method.
 
