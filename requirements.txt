@@ -1,8 +1,8 @@
 python==3.11.9
 numpy==1.26.4
 opencv==4.6.0
-pytorch==2.3.0
 gymnasium==1.0.0a2
 pygame==2.6.0
 ffmpeg==4.2.2
 moviepy==1.0.3
+pytorch==2.3.0
