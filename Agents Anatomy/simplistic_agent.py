@@ -55,7 +55,7 @@ class Agent:
         # actions that lead to the reward
         self.actions_taken = []
 
-    def step(self, environment):
+    def step(self, env):
         """
         carries out a step in policy
         1. observes environment,
@@ -63,13 +63,13 @@ class Agent:
         3. submits action to environments
         4. gets the reward for it
         taking an action and getting reward for that action which is added into reward accumulated by agent
-        :param environment:
+        :param env:observation of environment
         :return:
         """
-        current_observation = environment.get_observation()
-        actions = environment.get_actions()
+        current_observation = env.get_observation()
+        actions = env.get_actions()
         current_action = random.choice(actions)
-        reward = environment.action(current_action)
+        reward = env.action(current_action)
         self.actions_taken.append(current_action)
         self.total_reward += reward
 
