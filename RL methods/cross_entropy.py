@@ -16,3 +16,42 @@ Algorithm:
 4. Train on remaining episodes using observation as input and actions as output
 5. Repeat 1-4 until we are satisfied
 """
+# built-in packages
+from collections import namedtuple
+
+# third-party packages
+from torch import nn
+
+# source project packages
+
+
+# defining helper classes using collection
+
+# single episode stored as total un-discounted reward and collection of Episode Steps
+# Note that will not be using discounted reward anyway reason? given below from Sutton
+# refer to 31:37 https://www.youtube.com/watch?v=uGOGvALFWbo
+Episode = namedtuple('Episode', field_names=['episode_reward', 'episode_steps'])
+
+# represents single step agent makes in episode and stores observation and action agent completed.
+EpisodeStep = namedtuple('EpisodeStep', field_names=['observation', 'action'])
+
+# function that generates batches with episodes
+
+def iterate_batches(env, net, batch_size):
+    """
+
+    :param env: enc class instance from gym library
+    :param net: defined neural network (nn.module)
+    :param batch_size: count of episodes per iteration
+    :return:
+    """
+    g_batch = [] # accumulates batch (list of episode instances)
+    episode_rewards = 0.0 # reward for current episode
+    episode_steps = [] # lost of steps in episode
+    obs = env.reset() # reset observation to first observation
+    g_softmax = nn.Softmax(dim=1) # used to convert networks output to probabilities of actions
+
+    # at every iteration we convert observation to pytorch tensor and pass to network
+    # and get action probabilities.
+
+
