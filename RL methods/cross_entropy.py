@@ -21,8 +21,11 @@ from collections import namedtuple
 
 # third-party packages
 from torch import nn
+from torch import FloatTensor
+import numpy as np
 
 # source project packages
+from nn_archs import CrossEntropyNeuralNet as cross_net
 
 
 # defining helper classes using collection
@@ -53,5 +56,38 @@ def iterate_batches(env, net, batch_size):
 
     # at every iteration we convert observation to pytorch tensor and pass to network
     # and get action probabilities.
+
+    while True:
+        # take observation
+        obs_v = FloatTensor([obs])
+        # use simple neural net architecture feed in our observation and then use softmax on action space
+        action_prob_v = g_softmax(cross_net(obs_v))
+        act_probs = action_prob_v.data.numpy()[0]
+
+        # we have action probability distribution we can now choose action and get next observation
+        action = np.random.choice(len(act_probs), p=act_probs)
+        next_obs, reward, is_done, _, info = env.step(action)
+
+        episode_rewards += reward # append reward to reward of episode
+        episode_steps.append(EpisodeStep(observation=obs, action=action)) # add observation and reward
+
+        # check if the current episode is over (when cart pole stick falls down)
+        if is_done:
+            # append finalized episode to batch
+            g_batch.append(Episode(episode_rewards, episode_steps=episode_steps)) # add episode reward and number of steps
+            # reset environment and episodic variables
+            episode_rewards = 0.0
+            episode_steps = []
+            next_obs = env.reset()
+            # if batch has reached desired episode count return it to caller for processing using yield
+            if len(g_batch) == batch_size:
+                # generator function control is transferred to outer iteration loop and then continued after yield
+                yield g_batch
+                # clean up batch
+                g_batch = []
+
+        obs = next_obs
+
+
 
 
