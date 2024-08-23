@@ -23,9 +23,17 @@ from collections import namedtuple
 from torch import nn
 from torch import FloatTensor
 import numpy as np
+import gymnasium as gym
+import torch.optim as optim
+from torch.utils.tensorboard import SummaryWriter
 
 # source project packages
-from nn_archs import CrossEntropyNeuralNet as cross_net
+from nn_archs import CrossEntropyNeuralNet as CrossNet
+
+# CONSTANTS
+HIDDEN_SIZE = 128
+BATCH_SIZE = 16
+PERCENTILE_TO_SELECT = 70
 
 
 # defining helper classes using collection
@@ -61,7 +69,7 @@ def iterate_batches(env, net, batch_size):
         # take observation
         obs_v = FloatTensor([obs])
         # use simple neural net architecture feed in our observation and then use softmax on action space
-        action_prob_v = g_softmax(cross_net(obs_v))
+        action_prob_v = g_softmax(net(obs_v))
         act_probs = action_prob_v.data.numpy()[0]
 
         # we have action probability distribution we can now choose action and get next observation
@@ -87,6 +95,74 @@ def iterate_batches(env, net, batch_size):
                 g_batch = []
 
         obs = next_obs
+
+# core function of cross entropy method
+def filter_batch(g_batch, percentile):
+    """
+    core function of cross entropy method
+    1. given batch of episodes and percentile value, calculates boundary reward used to select elite episode & then trained
+    2. we use numpy percentile func to obtain boundary reward (is list of values and desired percentile)
+    3. calculate mean reward for monitoring
+    :param g_batch:
+    :param percentile:
+    :return:
+    """
+    rewards = list(map(lambda s: s.episode_reward, g_batch))
+    reward_bound = np.percentile(rewards, percentile)
+    reward_mean = float(np.mean(rewards))
+
+    train_observations = []
+    train_actions = []
+
+    # for every episode in batch check if the episode has higher total reward than boundary
+    # if so then populate observations and actions to train on
+
+    for reward, steps in g_batch:
+        if reward < reward_bound:
+                    continue
+        train_observations.extend(map(lambda step: step.observation, steps))
+        train_actions.extend(map(lambda step: step.action, steps))
+        #     for g_episode in g_batch:
+        #         if g_episode.episode_reward < reward_bound:
+        #             continue
+        #         train_observations.extend(lambda step: step.observation, g_episode.episode_reward)
+
+    # convert observation and actions into tensors
+    # return tuple of obs, action, boundary of reward and mean reward
+    train_observations_v = FloatTensor(train_observations)
+    train_actions_v = FloatTensor(train_actions)
+    # bound and mean to check performance of agent
+    return train_observations_v, train_actions_v, reward_bound, reward_mean
+
+
+def main():
+    env = gym.make('CartPole-v0') # create env
+    obs_size = env.observation_space.shape[0] # get observation size
+    n_actions = env.action_space.n # get number of actions
+    net = CrossNet(obs_size, HIDDEN_SIZE , n_actions) # object for our nn
+    obj = nn.CrossEntropyLoss() # define loss function
+    optimizer =optim.Adam(params=net.parameters(), lr=0.001) # define optimizer
+    writer = SummaryWriter('logs/') # initialize writer
+
+    for iter_no, batch in enumerate(iterate_batches(env, net, BATCH_SIZE)):
+        obs_v, acts_v, reward_b, reward_m = filter_batch(batch, PERCENTILE_TO_SELECT)
+        optimizer.zero_grad()
+        action_scores_v = net(obs_v)
+        loss_v = obj(action_scores_v, acts_v)
+        loss_v.backward()
+        optimizer.step()
+        print("%d: loss=%.3f, reward_mean=%.1f, rw_bound=%.1f" % (iter_no, loss_v.item(), reward_m, reward_b))
+        writer.add_scalar('loss', loss_v.item(), iter_no)
+        writer.add_scalar("reward_bound", reward_b, iter_no)
+        writer.add_scalar("reward_mean", reward_m, iter_no)
+        if reward_m > 199:
+            print("Solved!")
+            break
+    writer.close()
+
+
+if __name__ == '__main__':
+    main()
 
 
 

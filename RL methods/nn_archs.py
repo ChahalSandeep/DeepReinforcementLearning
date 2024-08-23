@@ -8,11 +8,6 @@ from torch import nn
 
 # project packages
 
-# CONSTANTS
-HIDDEN_SIZE = 128
-BATCH_SIZE = 16
-PERCENTILE_TO_SELECT = 70
-
 class CrossEntropyNeuralNet(nn.Module):
     """
     One hidden layer neural network
